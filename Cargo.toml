@@ -1,0 +1,14 @@
+[package]
+name = "subtitles-from-linked-chapters"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+encoding_rs = "0.8.35"
+quick-xml = { version = "0.37.1", features = ["serialize"] }
+rsubs-lib = "0.3.2"
+serde = { version = "1.0.216", features = ["derive"] }
+time = { version = "0.3.37", features = ["parsing"] }
+
+[patch.crates-io]
+rsubs-lib = { git = 'https://github.com/Urantij/rsubs-lib.git' }
