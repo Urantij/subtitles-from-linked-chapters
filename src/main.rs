@@ -7,30 +7,26 @@ use subtitles_from_linked_chapters::{
     update_subtitle_times, ResultChapter,
 };
 
+mod args;
+
 fn main() -> Result<(), Box<dyn Error>> {
     println!("Hello, world!");
 
-    let mut args: Vec<_> = std::env::args().collect();
-
-    let result_path = args.swap_remove(args.len() - 1);
-    let subtitles_path = args.swap_remove(args.len() - 1);
-    let chapters_path = args.swap_remove(args.len() - 1);
+    let args = args::get_args();
 
     let linked_name_to_file: Vec<_> = args
-        .into_iter()
-        .skip(1)
+        .names_to_ssa_pathes
+        .iter()
         .map(|arg| {
-            let split = arg.split_once("=").unwrap();
+            let subs = read_subtitles_file(&arg.path).unwrap();
 
-            let subs = read_subtitles_file(split.1.as_ref()).unwrap();
-
-            (split.0.to_owned(), subs)
+            (arg.name.to_owned(), subs)
         })
         .collect();
 
-    let mut sub_main_file = read_subtitles_file(subtitles_path.as_ref())?;
+    let mut sub_main_file = read_subtitles_file(args.subtitles_path.as_ref())?;
 
-    let chapters: Vec<_> = read_chapters_file(chapters_path.as_ref())?;
+    let chapters: Vec<_> = read_chapters_file(args.chapters_path.as_ref())?;
 
     {
         let not_found: Vec<_> = chapters
@@ -107,7 +103,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let res = sub_main_file.to_string();
 
-    fs::write(&result_path, &res)?;
+    fs::write(args.result_path, &res)?;
 
     println!(":)");
 

@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+clap = { version = "4.5.23", features = ["derive"] }
 encoding_rs = "0.8.35"
 quick-xml = { version = "0.37.1", features = ["serialize"] }
 rsubs-lib = "0.3.2"
